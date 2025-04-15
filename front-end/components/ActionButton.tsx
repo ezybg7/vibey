@@ -5,9 +5,10 @@ import { useRouter } from 'expo-router';
 interface ActionButtonProps {
     children: React.ReactNode;
     text: string;
+    onPress: () => void;
 };
 
-export default function ActionButton({ children, text }: ActionButtonProps) {
+export default function ActionButton({ children, text, onPress }: ActionButtonProps) {
     const router = useRouter();
 
     return (
@@ -16,7 +17,7 @@ export default function ActionButton({ children, text }: ActionButtonProps) {
             <View className='absolute bottom-[65px] w-full px-[50px]'>
                 <TouchableOpacity 
                     className='bg-black py-[20px] rounded-full justify-center items-center w-full'
-                    onPress={() => router.push('/signup')}
+                    onPress={onPress}
                 >
                     <Text className='text-white'>{text}</Text>
                 </TouchableOpacity>
