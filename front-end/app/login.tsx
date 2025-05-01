@@ -9,17 +9,19 @@ import * as AuthSession from 'expo-auth-session';
 // Ensure web browser redirect handling is set up
 WebBrowser.maybeCompleteAuthSession();
 
-// Define redirect URI
+// Define redirect URI - removing the unsupported useProxy option
 const redirectUri = AuthSession.makeRedirectUri();
 console.log("Redirect URI:", redirectUri); // For debugging
 
 export default function SignupScreen() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-
+    /*
     const handleSignin = async () => {
         try {
             setLoading(true);
+            
+            console.log("Starting Spotify auth flow");
             
             // Initialize the Supabase OAuth sign-in
             const { data, error } = await supabase.auth.signInWithOAuth({
@@ -40,32 +42,48 @@ export default function SignupScreen() {
                 console.error('No auth URL returned');
                 return;
             }
+
+            console.log("Opening auth URL:", authUrl);
             
             // Use WebBrowser to open the authentication URL
-            const result = await WebBrowser.openAuthSessionAsync(
-                authUrl,
-                redirectUri
-            );
-            
-            console.log('Auth result:', result);
-            
-            if (result.type === 'success') {
-                // After returning from the redirect
-                const { user, session, error: sessionError } = await supabase.auth.getSession();
+            try {
+                const result = await WebBrowser.openAuthSessionAsync(
+                    authUrl,
+                    redirectUri
+                );
                 
-                if (sessionError) {
-                    console.error('Session error:', sessionError);
-                } else if (session) {
-                    console.log('Successfully authenticated!');
-                    router.push('/(tabs)');
+                console.log('Auth completed with result type:', result.type);
+                console.log('Full result:', JSON.stringify(result));
+                
+                if (result.type === 'success') {
+                    console.log('Trying to get session after successful auth');
+                    // After returning from the redirect
+                    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+                    
+                    if (sessionError) {
+                        console.error('Session error:', sessionError);
+                    } else if (sessionData?.session) {
+                        console.log('Successfully authenticated!');
+                        router.push('/(tabs)');
+                    } else {
+                        console.log('No session data returned');
+                    }
+                } else {
+                    console.log('Auth was not successful:', result.type);
                 }
+            } catch (browserError) {
+                console.error('Browser session error:', browserError);
             }
         } catch (error) {
             console.error('Authentication error:', error);
         } finally {
             setLoading(false);
         }
-    };
+    };*/
+
+    const handleSignin = () => {
+        router.push('/(tabs)');
+    }
 
     return (
         <ActionButton text='Sign Up' onPress={() => {}}>
