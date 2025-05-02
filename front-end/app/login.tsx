@@ -82,7 +82,7 @@ export default function SignupScreen() {
     };*/
 
     const handleSignin = () => {
-        router.push('/(tabs)');
+        router.push('/(tabs)/dalton');
     }
 
     return (
