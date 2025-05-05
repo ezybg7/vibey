@@ -1,4 +1,5 @@
 import { View, Text, Image } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface SongCardProps {
     title: string;
@@ -23,7 +24,14 @@ export default function SongCard({
             <View className='flex flex-row justify-between bg-gray-800 px-[20px] py-[15px]'>
                 <View className='flex flex-col gap-[10px]'>
                     <Text className='text-white font-bold'>{title}</Text>
-                    <Text className='text-gray-400'>{artist}</Text>
+                    <View className='flex flex-row gap-[8px] items-center'>
+                        <FontAwesome 
+                            name="spotify" 
+                            size={32} 
+                            color="#1DB954" 
+                        />
+                        <Text className='text-gray-400'>{artist}</Text>
+                    </View>
                 </View>
                 <Text>dislike/like</Text>
             </View>
