@@ -9,6 +9,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import AudioPlayer from "@/components/AudioPlayer";
+import supabase from '@/api/supabaseClient';
 import { FaPlay } from "react-icons/fa";
 
 // Song type definition
@@ -38,14 +39,23 @@ export default function DiscoverPage() {
         
     }, [])
 
-    const handleSwipeRight = (song: Song) => {
-        // insert this song into songs table on supabase
-    };
+    // Update currentSong whenever the songs stack changes
+    useEffect(() => {
+        setCurrentSong(songs.length > 0 ? songs[songs.length - 1] : null);
+    }, [songs]);
 
-  // Update currentSong whenever the songs stack changes
-  useEffect(() => {
-    setCurrentSong(songs.length > 0 ? songs[songs.length - 1] : null);
-  }, [songs]);
+    const handleSwipeRight = (song: Song) => {
+        const addSong = async () => {
+            const { data, error } = await supabase
+                .from('songs')
+                .insert([song])
+                .select()
+            if (error) {
+                console.log(error);
+            }
+        };
+        addSong();
+    };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-900 p-4">
@@ -58,12 +68,7 @@ export default function DiscoverPage() {
               songs={songs}
               setSongs={setSongs}
               isCurrentSong={currentSong === song}
-              onSwipeRight={song => {
-                // your custom logic!
-                console.log("User swiped RIGHT on:", song.title);
-                // e.g. addToPlaylist(song)
-                }}
-                
+              onSwipeRight={(song) => {handleSwipeRight(song)}}
             />
           ))}
         </AnimatePresence>
@@ -116,10 +121,11 @@ const Card: React.FC<CardProps> = ({
     if (Math.abs(info.offset.x) > 100) {
       setSongs((prev) => prev.filter((s) => s !== song));
       const x = info.offset.x;
-        if (x > 100) {
-          // → right swipe
-          onSwipeRight?.(song);
-          setSongs((prev) => prev.filter((s) => s !== song));
+     if (x > 100) {
+        // → right swipe
+        onSwipeRight?.(song);
+        setSongs((prev) => prev.filter((s) => s !== song));
+        } 
     }
   };
 
