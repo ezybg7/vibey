@@ -1,10 +1,11 @@
 # backend/main.py
 """
 FastAPI service that returns 10 songs with real artwork & 30‑second previews,
-pulled live from Apple’s public iTunes Search API.
+pulled live from Apple’s public iTunes Search API. 
 
 Endpoint:
-    GET /get-songs   →  JSON array[Track]
+    GET /get-songs   →  JSON array[Track] 
+    -Dalton J
 """
 
 from asyncio import gather
