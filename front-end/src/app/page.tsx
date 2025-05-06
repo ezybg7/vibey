@@ -59,11 +59,11 @@ export default function Home() {
 						animate="visible"
 					>
 						<motion.h1 variants={textVariants} className='text-[90px]'>
-							Discover new music
-						</motion.h1>
+              Discover <span className="text-green-500 font-bold">new</span> music
+            </motion.h1>
 						
 						<motion.h5 variants={textVariants} className='text-[34px]'>
-							Easily uncover music you potentially like in a tinder like swipable experience!
+							Easily uncover music you like in a <span className="text-purple-500">swipeable</span> experience!
 						</motion.h5>
 						
 						<motion.div 
@@ -80,7 +80,7 @@ export default function Home() {
               </a>
 							<a 
                   className={`flex items-center justify-center bg-white outline-gray-400 outline-[1px] shadow-lg rounded-[10px] py-[12px] px-[20px] ${false ? 'w-full' : 'w-fill'}`}
-                  href='/about'
+                  href='/learn'
               >
                 <p className='font-light text-black text-[24px]'>
                  Learn More
