@@ -23,7 +23,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["*"] to open to all
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,6 +33,12 @@ app.add_middleware(
 # ── (title, artist) pairs you want in the response ──────────────────────────
 QUERIES: List[Tuple[str, str]] = [
     ("Apple Pie", "Travis Scott"),
+    ("BMF", "SZA"),
+    ("Hotel California", "Eagles"),
+    ("EARFQUAKE", "Tyler The Creator"),
+    ("King Kunta", "Kendrick Lamar"),
+    ("RATHER LIE", "Playboi Carti"),
+    ("Dark Thoughts", "Lil Tecca"),
     ("River Flows In You", "Yiruma"),
     ("Dreams", "Fleetwood Mac"),
     ("Levitating", "Dua Lipa"),
