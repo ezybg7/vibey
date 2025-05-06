@@ -1,4 +1,5 @@
-export type song = {
+export type Song = {
+    id: number,
     title: string,
     artists: string[],
     cover_art_url: string,
