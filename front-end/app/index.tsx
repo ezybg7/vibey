@@ -19,12 +19,14 @@
 // }
 
 import { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import SongCard from '@/components/SongCard';
 import { LinearGradient } from 'expo-linear-gradient';
 import AudioPlayer from '@/components/AudioPlayer';
 import { songs } from '@/constants/Songs';
 import Swiper from 'react-native-deck-swiper';
+
+const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
     const [index, setIndex] = useState(0);
@@ -50,12 +52,19 @@ export default function HomeScreen() {
                 <Swiper
                     cards={songs}
                     cardIndex={index}
+                    backgroundColor="transparent"
+                    containerStyle={{
+                        width: width * 0.9,
+                        height: height * 0.6,
+                        backgroundColor: 'transparent',
+                    }}
                     renderCard={card => (
                         <SongCard
                             title={card.title}
                             album={card.album}
                             artist={card.artist}
                             coverArt=''
+                            
                         />
                     )}
                 />
