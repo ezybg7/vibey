@@ -10,9 +10,9 @@ export default function NavBar() {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/discover', Icon: LuMusic },
-    { href: '/playlists', Icon: FaRegFolder },
-    { href: '/profile', Icon: CgProfile },
+    { href: '/auth/discover', Icon: LuMusic },
+    { href: '/auth/playlists', Icon: FaRegFolder },
+    { href: '/auth/profile', Icon: CgProfile },
   ];
 
   return (

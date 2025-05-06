@@ -130,7 +130,7 @@ export default function DiscoverPage() {
                 />
                 {currentSong && (
                     <AudioPlayer
-                    key={currentSong.playback_uri} // force remount on src change
+                    //key={currentSong.playback_uri} // force remount on src change
                     src={currentSong.playback_uri}
                     />
                 )}
