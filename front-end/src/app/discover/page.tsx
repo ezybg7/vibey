@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import AudioPlayer from "@/components/AudioPlayer";
 import supabase from '@/api/supabaseClient';
+import axios from '@/api/axios';
 import { FaPlay } from "react-icons/fa";
 
 // Song type definition
@@ -30,13 +31,24 @@ interface CardProps {
 
 export default function DiscoverPage() {
   const [songs, setSongs] = useState<Song[]>(songData);
+  const [loading, setLoading] = useState<boolean>(false);
   const [currentSong, setCurrentSong] = useState<Song | null>(
     songs.length > 0 ? songs[songs.length - 1] : null
   );
 
     useEffect(() => {
         // call backend end point for songs here
-        
+        setLoading(true);
+        axios
+        .get<Song[]>('/get-songs')
+        .then((res) => {
+            setSongs(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+        .finally(() => setLoading(false));
+
     }, [])
 
     // Update currentSong whenever the songs stack changes
