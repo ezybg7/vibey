@@ -12,6 +12,10 @@ import AudioPlayer from "@/components/AudioPlayer";
 import supabase from '@/api/supabaseClient';
 import axios from '@/api/axios';
 import { FaPlay } from "react-icons/fa";
+import { ScaleLoader } from "react-spinners";
+import { IoIosThumbsUp } from "react-icons/io";
+import { IoIosThumbsDown } from "react-icons/io";
+
 
 // Song type definition
 interface Song {
@@ -69,23 +73,35 @@ export default function DiscoverPage() {
         addSong();
     };
 
+     // helper to remove the top card
+     const removeTop = (song: Song) => {
+       setSongs(prev => prev.filter(s => s !== song));
+    };
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-900 p-4">
-      <div className="relative h-96 w-72">
-        <AnimatePresence>
-          {songs.map((song, index) => (
-            <Card
-              key={index}
-              song={song}
-              songs={songs}
-              setSongs={setSongs}
-              isCurrentSong={currentSong === song}
-              onSwipeRight={(song) => {handleSwipeRight(song)}}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
-
+        {!loading ? (
+            <div className="relative h-96 w-72">
+                <AnimatePresence>
+                {songs.map((song, index) => (
+                    <Card
+                    key={index}
+                    song={song}
+                    songs={songs}
+                    setSongs={setSongs}
+                    isCurrentSong={currentSong === song}
+                    onSwipeRight={(song) => {handleSwipeRight(song)}}
+                    />
+                ))}
+                </AnimatePresence>
+            </div>
+        ) : (
+            <div>
+                <ScaleLoader
+                    color='bg-green-600'
+                />
+            </div>
+        )}
       {songs.length === 0 && (
         <div className="mt-4 text-center">
           <p className="text-lg font-medium text-gray-200">No more songs!</p>
@@ -101,13 +117,36 @@ export default function DiscoverPage() {
       {/* <p className="mt-6 text-gray-400 text-center">
         Songs left: {songs.length}
       </p> */}
-
-      {currentSong && (
-        <AudioPlayer
-          key={currentSong.playback_uri} // force remount on src change
-          src={currentSong.playback_uri}
-        />
-      )}
+      {!loading && (
+            <div className='flex flex-row justify-between items-center gap-[60px]'>
+                <IoIosThumbsDown
+                size={46}
+                className="cursor-pointer"
+                onClick={() => {
+                    if (!currentSong) return;
+                    // “swipe” left
+                    removeTop(currentSong);
+                }}
+                />
+                {currentSong && (
+                    <AudioPlayer
+                    key={currentSong.playback_uri} // force remount on src change
+                    src={currentSong.playback_uri}
+                    />
+                )}
+                <IoIosThumbsUp
+                  size={46}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    if (!currentSong) return;
+                    // first do your “add to playlist” logic
+                    handleSwipeRight(currentSong);
+                    // then remove the card
+                    removeTop(currentSong);
+                  }}
+                />
+            </div>
+        )}
     </div>
   );
 }
