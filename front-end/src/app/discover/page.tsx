@@ -9,6 +9,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import AudioPlayer from "@/components/AudioPlayer";
+import supabase from '@/api/supabaseClient';
 import { FaPlay } from "react-icons/fa";
 
 // Song type definition
@@ -24,6 +25,7 @@ interface CardProps {
   songs: Song[];
   setSongs: React.Dispatch<React.SetStateAction<Song[]>>;
   isCurrentSong: boolean;
+  onSwipeRight?: (song: Song) => void;
 }
 
 export default function DiscoverPage() {
@@ -32,10 +34,28 @@ export default function DiscoverPage() {
     songs.length > 0 ? songs[songs.length - 1] : null
   );
 
-  // Update currentSong whenever the songs stack changes
-  useEffect(() => {
-    setCurrentSong(songs.length > 0 ? songs[songs.length - 1] : null);
-  }, [songs]);
+    useEffect(() => {
+        // call backend end point for songs here
+        
+    }, [])
+
+    // Update currentSong whenever the songs stack changes
+    useEffect(() => {
+        setCurrentSong(songs.length > 0 ? songs[songs.length - 1] : null);
+    }, [songs]);
+
+    const handleSwipeRight = (song: Song) => {
+        const addSong = async () => {
+            const { data, error } = await supabase
+                .from('songs')
+                .insert([song])
+                .select()
+            if (error) {
+                console.log(error);
+            }
+        };
+        addSong();
+    };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-900 p-4">
@@ -48,6 +68,7 @@ export default function DiscoverPage() {
               songs={songs}
               setSongs={setSongs}
               isCurrentSong={currentSong === song}
+              onSwipeRight={(song) => {handleSwipeRight(song)}}
             />
           ))}
         </AnimatePresence>
@@ -84,6 +105,7 @@ const Card: React.FC<CardProps> = ({
   songs,
   setSongs,
   isCurrentSong,
+  onSwipeRight,
 }) => {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-150, 0, 150], [-15, 0, 15]);
@@ -98,6 +120,12 @@ const Card: React.FC<CardProps> = ({
   const handleDragEnd = (_: MouseEvent | TouchEvent, info: PanInfo) => {
     if (Math.abs(info.offset.x) > 100) {
       setSongs((prev) => prev.filter((s) => s !== song));
+      const x = info.offset.x;
+     if (x > 100) {
+        // → right swipe
+        onSwipeRight?.(song);
+        setSongs((prev) => prev.filter((s) => s !== song));
+        } 
     }
   };
 
