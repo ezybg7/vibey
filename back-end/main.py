@@ -12,6 +12,7 @@ from typing import List, Tuple
 
 import httpx
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, HttpUrl
 
 app = FastAPI(
@@ -19,6 +20,15 @@ app = FastAPI(
     description="Fetches 10 songs from iTunes Search API with artwork & preview",
     version="1.0.0",
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["*"] to open to all
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # ── (title, artist) pairs you want in the response ──────────────────────────
 QUERIES: List[Tuple[str, str]] = [
