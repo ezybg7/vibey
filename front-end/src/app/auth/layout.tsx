@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <div>
         {children}
-        <div className='absolute bottom-0 left-0 w-full flex justify-center items-center pb-[30px]'>
+        <div className='sticky bottom-0 left-0 w-full flex justify-center items-center pb-[30px]'>
           <Navbar/>
         </div>
     </div>

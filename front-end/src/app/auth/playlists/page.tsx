@@ -76,27 +76,31 @@ export default function Playlists() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-8 pr-96">
+    <div className="min-h-screen bg-slate-950 text-white flex flex-col p-8 pr-96">
       <h1 className="text-2xl font-bold mb-6">Your Liked Songs</h1>
 
-      <div className="grid grid-cols-2 gap-4 max-w-4xl">
-        {songs.map((song) => (
-          <div
-            key={song.id}
-            onClick={() => handleSongSelect(song)}
-            className="cursor-pointer"
-          >
-            <Song
-              title={song.title}
-              artists={song.artists}
-              cover_art_url={song.cover_art_url}
-              playback_uri={song.playback_uri}
-              onDelete={() => handleDeleteSong(song)}
-            />
-          </div>
-        ))}
+      {/* this div grows to fill available space and scrolls internally */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+          {songs.map((song) => (
+            <div
+              key={song.id}
+              onClick={() => handleSongSelect(song)}
+              className="cursor-pointer"
+            >
+              <Song
+                title={song.title}
+                artists={song.artists}
+                cover_art_url={song.cover_art_url}
+                playback_uri={song.playback_uri}
+                onDelete={() => handleDeleteSong(song)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* stays fixed at the bottom */}
       <MusicPlayer
         currentTrack={currentTrack}
         playlist={songs}

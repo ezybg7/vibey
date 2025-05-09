@@ -51,6 +51,7 @@ QUERIES: List[Tuple[str, str]] = [
     ("Shape of You", "Ed Sheeran"),
 ]
 
+QUERIES.reverse()
 
 class Track(BaseModel):
     title: str
